@@ -1,0 +1,69 @@
+// {{ ansible_managed }}
+
+Unattended-Upgrade::Origins-Pattern {
+{% if unattended_upgrades_stable %}
+  "o=Debian,a=stable";
+  "o=Debian,a=stable-updates";
+{% endif %}
+{% if unattended_upgrades_security %}
+  "origin=Debian,codename=${distro_codename},label=Debian-Security";
+{% endif %}
+};
+
+Unattended-Upgrade::Package-Blacklist {
+{% for item in unattended_upgrades_blacklist %}
+  {{ item }};
+{% endfor %}
+};
+
+// This option allows you to control if on a unclean dpkg exit
+// unattended-upgrades will automatically run
+//   dpkg --force-confold --configure -a
+// The default is true, to ensure updates keep getting installed
+Unattended-Upgrade::AutoFixInterruptedDpkg "{{ unattended_upgrades_autofix }}";
+
+// Split the upgrade into the smallest possible chunks so that
+// they can be interrupted with SIGUSR1. This makes the upgrade
+// a bit slower but it has the benefit that shutdown while a upgrade
+// is running is possible (with a small delay)
+Unattended-Upgrade::MinimalSteps "{{ unattended_upgrades_minimal_steps }}";
+
+// Install all unattended-upgrades when the machine is shuting down
+// instead of doing it in the background while the machine is running
+// This will (obviously) make shutdown slower
+Unattended-Upgrade::InstallOnShutdown "{{ unattended_upgrades_install_on_shutdown }}";
+
+// Send email to this address for problems or packages upgrades
+// If empty or unset then no email is sent, make sure that you
+// have a working mail setup on your system. A package that provides
+// 'mailx' must be installed. E.g. "user@example.com"
+Unattended-Upgrade::Mail "{{ unattended_upgrades_mail }}";
+
+// Set this value to "true" to get emails only on errors. Default
+// is to always send a mail if Unattended-Upgrade::Mail is set
+Unattended-Upgrade::MailOnlyOnError "{{ unattended_upgrades_mail_only_on_error }}";
+
+// Do automatic removal of new unused dependencies after the upgrade
+// (equivalent to apt-get autoremove)
+Unattended-Upgrade::Remove-Unused-Dependencies "{{ unattended_upgrades_autoremove }}";
+
+// Automatically reboot *WITHOUT CONFIRMATION* if
+//  the file /var/run/reboot-required is found after the upgrade
+Unattended-Upgrade::Automatic-Reboot "{{ unattended_upgrades_reboot }}";
+
+// Automatically reboot even if there are users currently logged in.
+Unattended-Upgrade::Automatic-Reboot-WithUsers "{{ unattended_upgrades_reboot_with_users }}";
+
+// If automatic reboot is enabled and needed, reboot at the specific
+// time instead of immediately
+Unattended-Upgrade::Automatic-Reboot-Time "{{ unattended_upgrades_reboot_time }}";
+
+{% if unattended_upgrades_download_limit %}
+// Use apt bandwidth limit feature, this example limits the download
+// speed to 70kb/sec
+//Acquire::http::Dl-Limit "70";
+Acquire::http::Dl-Limit "{{ unattended_upgrades_download_limit }}";
+
+{% endif %}
+// Enable logging to syslog. Default is False
+Unattended-Upgrade::SyslogEnable "{{ unattended_upgrades_syslog }}";

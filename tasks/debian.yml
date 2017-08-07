@@ -1,0 +1,13 @@
+---
+
+- name: apt | install unattended-upgrades
+  apt:
+    pkg: unattended-upgrades
+    state: present
+    cache_valid_time: 86400
+
+- name: template | configure unattended-upgrades
+  template:
+    src: 50unattended-upgrades.j2
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+

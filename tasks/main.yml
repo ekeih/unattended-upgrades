@@ -1,0 +1,4 @@
+---
+
+- include: "{{ ansible_distribution | lower }}.yml"
+  tags: unattended-upgrades
