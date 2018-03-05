@@ -1,7 +1,7 @@
 ---
 
-unattended_upgrades_security: yes
-unattended_upgrades_stable: no
+unattended_upgrades_security: true
+unattended_upgrades_stable: false
 unattended_upgrades_blacklist: []
 unattended_upgrades_autofix: "true"
 unattended_upgrades_minimal_steps: "true"
@@ -12,5 +12,5 @@ unattended_upgrades_autoremove: "true"
 unattended_upgrades_reboot: "false"
 unattended_upgrades_reboot_with_users: "false"
 unattended_upgrades_reboot_time: "02:00"
-unattended_upgrades_download_limit: no
+unattended_upgrades_download_limit: false
 unattended_upgrades_syslog: "false"
