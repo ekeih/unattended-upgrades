@@ -4,6 +4,7 @@ Unattended-Upgrade::Origins-Pattern {
 {% if unattended_upgrades_stable %}
   "o=Debian,a=stable";
   "o=Debian,a=stable-updates";
+  "codename=${distro_codename},c=stable";
 {% endif %}
 {% if unattended_upgrades_security %}
   "origin=Debian,codename=${distro_codename},label=Debian-Security";
